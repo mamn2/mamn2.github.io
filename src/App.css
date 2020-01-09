@@ -144,11 +144,12 @@
   padding-left: 1em;
 }
 
-.about-grid p {
+/* .about-grid p {
   font-family: 'Oxygen', sans-serif;
+  font-size: 1.4vw;
   text-align: left;
-  padding-right: 3.2em;
-}
+  padding: 1em;
+} */
 
 .about-list i {
   font-size: 66px;
@@ -158,24 +159,13 @@
 .aboutme-pic1 {
   height: 250px;
   width: 250px;
-  padding-top: .5em;
-  padding-bottom: 1em;
   border-radius:100%;
-  position: absolute;
-  right: 150px;
-  top: 300px;
 }
 
 .aboutme-pic2 {
   height: 250px;
   width: 250px;
-  padding-top: .5em;
-  padding-right: 0em;
-  padding-bottom: 1em;
   border-radius:100%;
-  position: absolute;
-  right: 370px;
-  top: 80px;
 }
 
 .business-contact-pic {
@@ -185,9 +175,6 @@
   padding-right: 0em;
   padding-bottom: 1em;
   border-radius:100%;
-  position: absolute;
-  left: 220px;
-  top: 190px;
 }
 
 .resume-right-col {

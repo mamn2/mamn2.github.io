@@ -9,10 +9,9 @@ class About extends Component {
     return(
       <div className='about-body'>
         <Grid className='about-grid'>
-          <Cell col={6}>
+          <Cell style={{width: '40%', height: '80%'}} col={6}  className='parent'>
             <h3>About Me</h3>
-            <p style={{width: '75%', margin: 'auto', paddingTop: '0em'}}>
-              Wow! A whole page to write about me?? This is going to be fun!<br></br><br></br>
+            <p className='child'>
               Hey there, I'm Mohamed, an enthusiastic musician, traveller, and software engineer.
               I'm so glad to see that you've stumbled upon my page!
               As you may know, I am a student at UIUC, majoring in computer science and music. That's right,
@@ -36,6 +35,7 @@ class About extends Component {
                 src={HungarianPic}
                 alt="avatar"
               />
+              <hr></hr>
               <img
                 className='aboutme-pic2'
                 src={FlumeGorge2}
