@@ -1,13 +1,15 @@
 async function init() {
 
-    d3.select('body').append('p').attr('width', '800').html('Though there have been many advancements in creating a more equal society by the law, and eliminating systemic biases, one front that has remained fairly quiet is the question of nationality.')
+    d3.select('body').append('p').attr('width', '800px').attr('word-wrap', 'break-word').html('Though there have been many advancements in creating a more equal society by the law, and eliminating systemic biases, one front that has remained fairly quiet is the question of nationality. \
+      Nationality is still used worldwide as a basis for judging the fitness of an individual to enter another nation. For example, if you are American, then you are entitled to enter Mexico visa-free. But if you\'re Vietnamese, you\'ll need to go to an embassy and get a visa. \
+      The following diagram shows countries ranked by their passport power, the number of foreign nations a country\'s citizens can enter without pre-booking a visa. Find your country and select it. Then click next to go to the next slide.')
+    d3.select('body').append('a').attr('href', function() { return '#worldmapP' }).html('Next')
 
     data = await d3.csv("https://raw.githubusercontent.com/ilyankou/passport-index-dataset/master/legacy/2019-11-23/passport-index-matrix.csv")
     hdi_data = Object.entries(await d3.csv("https://raw.githubusercontent.com/bromero26/human-development-index/master/hdi_human_development_index.csv"))
     countries_topo = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
 
     var div = d3.select('body').append('div').attr('class', 'tooltip-donut').style('opacity', 0)
-
 
     let changeNames = new Map()
     changeNames.set("Slovak Republic", "Slovakia").set("St. Kitts and Nevis", "Saint Kitts and Nevis")
@@ -47,7 +49,7 @@ async function init() {
                 visaOnArrivalList.push(passportData[j][0]);
             } else if (passportData[j][1] === "1") {
                 visaLimitedList.push(passportData[j][0])
-            } else {
+            } else if (passportData[j][1] === "0") {
                 visaRequiredList.push(passportData[j][0])
             }
         }
@@ -105,7 +107,7 @@ async function init() {
                      .attr('opacity', '1');
                 div.transition().duration('50').style('opacity', 0)
                 }
-            )
+            ).attr("href", function(d) { return "#worldmap" })
 
     previousSelectionRect = null
     previousSelectionCircle = null
@@ -144,6 +146,8 @@ async function init() {
             }
             d3.select('#worldmap').select('.map').selectAll('#' + thisCountry.replace(/\s/g, "")).attr('fill', 'red')
         }
+
+        d3.select('#worldmap').select('.map').selectAll('#' + arr[parseInt(id.substring(2))].country.replace(/\s/g, "")).attr('fill', 'black')
         
     }
 
@@ -154,6 +158,10 @@ async function init() {
     svg1.append('g')
             .attr('transform', 'translate(180, 50)')
             .call(d3.axisTop(xScale))
+
+    d3.select('body').append('p').attr('width', '800px').attr('word-wrap', 'break-word').attr('id', 'worldmapP')
+        .html('Here is your countries passport power map. The green represents all the countries you can go to visa-free. The blue represents all the countries where you can get a visa upon arrival without too many complications (usually). The orange represents all the countries where you will need to get an electronic visa prior to departing. The red represents all the countries that you will need to seek a physical visa (typically stamped in your passport) prior to departure. Your country should be in black.')
+
 
     const projection = d3.geoMercator().scale(70).translate([500 / 2, 200 / 1.4]);
     const path = d3.geoPath(projection);
@@ -171,7 +179,7 @@ async function init() {
             d3.select('body').append('svg').attr('width', '800').attr('height', '300').attr('id', 'worldmap')
                 .append('g')
                     .attr('class', 'map')
-                    .attr('transform', 'translate(100, 50)')
+                    .attr('transform', 'translate(100, 100)')
                         .selectAll('path').data(countries.features).enter().append('path')
                             .attr('class', 'country')
                             .attr('fill', '#ccc')
@@ -180,44 +188,54 @@ async function init() {
                             .attr('id', dta => dta.properties.name.replace(/\s/g, "") )
     });
 
-    
+    d3.select('body').append('p').attr('width', '800px').attr('word-wrap', 'break-word')
+        .html('Interestingly enough, someone from another country, who has similar economic means and an equal moral standing may have a completely different map from you. Perhaps their map allows them to go to more places, or perhaps less places. Perhaps they are allowed to work in more places than you, perhaps less. Either way, those circumstances are largely out of people\'s control. To see how large of a difference nationality affects freedom of travel, click next and then scroll.')
 
-    let svg3 = d3.select('body').append('svg').attr('width', '800').attr('height', '1000').attr('id', 'scatter')
-        svg3.append('g').attr('id', 'circ')
-            .attr('transform', 'translate(100, 50)')
-            .selectAll("circle")
-            .data(arr).enter().append('circle')
-                .attr('cx', dta => (dta.hdi - 0.3) * 400/0.7)
-                .attr('cy', dta => 360 -  2*(dta.visaFreeList.length + dta.visaOnArrivalList.length))
-                .attr('r', '3')
-                .attr('fill', 'darkblue')
-                .on('click', clickCountry)
-                .attr('id', function(d, i) { return 'id' + i })
-                .on('mouseover', function (d, i) {
-                    d3.select(this).transition()
-                         .duration('50')
-                         .attr('opacity', '.6')
-                    div.transition().duration('50').style('opacity', 1)
-                    div.html(d.country)
-                        .style("left", (d3.event.pageX + 10) + "px")
-                        .style("top", (d3.event.pageY - 15) + "px");
-                })
-                .on('mouseout', function (d, i) {
-                    d3.select(this).transition()
-                         .duration('50')
-                         .attr('opacity', '1');
-                    div.transition().duration('50').style('opacity', 0)
-                    }
-                )
+    let invoked = false
+    d3.select('body').append('a').attr('href', '#scatter').html('Next').on('click', function () {if (!invoked) scatterPlot()})
 
-    svg3.append('g')
-            .attr('transform', 'translate(100, 50)')
-            .call(d3.axisLeft(d3.scaleLinear().domain([180, 0]).range([0, 360])))
+    function scatterPlot() {
+        invoked = true
+        let svg3 = d3.select('body').append('svg').attr('width', '800').attr('height', '450').attr('id', 'scatter')
+            svg3.append('g').attr('id', 'circ')
+                .attr('transform', 'translate(50, 50)')
+                .selectAll("circle")
+                .data(arr).enter().append('circle')
+                    .attr('cx', dta => (dta.hdi - 0.3) * 400/0.7)
+                    .attr('cy', dta => 360 -  2*(dta.visaFreeList.length + dta.visaOnArrivalList.length))
+                    .attr('r', '3')
+                    .attr('fill', 'darkblue')
+                    .on('click', clickCountry)
+                    .attr('id', function(d, i) { return 'id' + i })
+                    .on('mouseover', function (d, i) {
+                        d3.select(this).transition()
+                            .duration('50')
+                            .attr('opacity', '.6')
+                        div.transition().duration('50').style('opacity', 1)
+                        div.html(d.country)
+                            .style("left", (d3.event.pageX + 10) + "px")
+                            .style("top", (d3.event.pageY - 15) + "px");
+                    })
+                    .on('mouseout', function (d, i) {
+                        d3.select(this).transition()
+                            .duration('50')
+                            .attr('opacity', '1');
+                        div.transition().duration('50').style('opacity', 0)
+                        }
+                    )
 
-    svg3.append('g')
-            .attr('transform', 'translate(100, 410)')
-            .call(d3.axisBottom(d3.scaleLinear().domain([0.3, 1]).range([0, 400])))
+        svg3.append('g')
+                .attr('transform', 'translate(50, 50)')
+                .call(d3.axisLeft(d3.scaleLinear().domain([180, 0]).range([0, 360])))
+
+        svg3.append('g')
+                .attr('transform', 'translate(50, 410)')
+                .call(d3.axisBottom(d3.scaleLinear().domain([0.3, 1]).range([0, 400])))
+
+        d3.select('body').append('p').attr('width', '800px').attr('word-wrap', 'break-word')
+            .html('This chart shows a trend in a countries passport power based on its HDI (human development index). As we can see, citizens of more developed countries have significantly more travelling freedom than those from less developed areas. This is an example of nationality privilege and systemic inequality on the basis of nationality.')
+        
             
-    
+    }
     
 }
