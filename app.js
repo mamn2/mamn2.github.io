@@ -1,15 +1,11 @@
 async function init() {
 
-    await d3.select('body').append('p').attr('width', '800px').attr('word-wrap', 'break-word').html('Though there have been many advancements in creating a more equal society by the law, and eliminating systemic biases, one front that has remained fairly quiet is the question of nationality. \
-      Nationality is still used worldwide as a basis for judging the fitness of an individual to enter another nation. For example, if you are American, then you are entitled to enter Mexico visa-free. But if you\'re Vietnamese, you\'ll need to go to an embassy and get a visa. \
-      The following diagram shows countries ranked by their passport power, the number of foreign nations a country\'s citizens can enter without pre-booking a visa. Find your country and select it. Then click next to go to the next slide.')
-    await d3.select('body').append('a').attr('href', function() { return '#worldmapP' }).html('Next')
+    var div = d3.select('body').append('div').attr('class', 'tooltip-donut').style('opacity', 0)
 
     data = await d3.csv("https://raw.githubusercontent.com/ilyankou/passport-index-dataset/master/legacy/2019-11-23/passport-index-matrix.csv")
     hdi_data = Object.entries(await d3.csv("https://raw.githubusercontent.com/bromero26/human-development-index/master/hdi_human_development_index.csv"))
     countries_topo = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
 
-    var div = d3.select('body').append('div').attr('class', 'tooltip-donut').style('opacity', 0)
 
     let changeNames = new Map()
     changeNames.set("Slovak Republic", "Slovakia").set("St. Kitts and Nevis", "Saint Kitts and Nevis")
@@ -196,6 +192,7 @@ async function init() {
 
     function scatterPlot() {
         invoked = true
+        d3.select('body').select('a').remove()
         let svg3 = d3.select('body').append('svg').attr('width', '800').attr('height', '450').attr('id', 'scatter')
             svg3.append('g').attr('id', 'circ')
                 .attr('transform', 'translate(50, 50)')
