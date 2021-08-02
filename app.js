@@ -103,7 +103,7 @@ async function init() {
                      .attr('opacity', '1');
                 div.transition().duration('50').style('opacity', 0)
                 }
-            ).attr("href", function(d) { return "#worldmap" })
+            )
 
     previousSelectionRect = null
     previousSelectionCircle = null
@@ -182,10 +182,26 @@ async function init() {
                             .attr('stroke', '#999')
                             .attr('d', path)
                             .attr('id', dta => dta.properties.name.replace(/\s/g, "") )
+                            .on('mouseover', function (d, i) {
+                                d3.select(this).transition()
+                                     .duration('50')
+                                     .attr('opacity', '.6')
+                                div.transition().duration('50').style('opacity', 1)
+                                div.html(d.properties.name)
+                                    .style("left", (d3.event.pageX + 10) + "px")
+                                    .style("top", (d3.event.pageY - 15) + "px");
+                            })
+                            .on('mouseout', function (d, i) {
+                                d3.select(this).transition()
+                                     .duration('50')
+                                     .attr('opacity', '1');
+                                div.transition().duration('50').style('opacity', 0)
+                                }
+                            )
     });
 
     d3.select('body').append('p').attr('width', '800px').attr('word-wrap', 'break-word')
-        .html('Interestingly enough, someone from another country, who has similar economic means and an equal moral standing may have a completely different map from you. Perhaps their map allows them to go to more places, or perhaps less places. Perhaps they are allowed to work in more places than you, perhaps less. Either way, those circumstances are largely out of people\'s control. To see how large of a difference nationality affects freedom of travel, click next and then scroll.')
+        .html('Interestingly enough, someone from another country, who has similar economic means and an equal moral standing may have a completely different map from you. Perhaps their map allows them to go to more places, or perhaps less places. Perhaps they are allowed to work in more places than you, perhaps less. Either way, those circumstances are largely out of people\'s control. To see how large of a difference nationality affects freedom of travel, click next.')
 
     let invoked = false
     d3.select('body').append('a').attr('href', '#scatter').html('Next').on('click', function () {if (!invoked) scatterPlot()})
