@@ -172,8 +172,8 @@ async function init() {
             const countries = topojson.feature(data, data.objects.countries);
             countries.features.splice(159, 1)
             console.log(data)
-            d3.select('body').append('svg').attr('width', '800').attr('height', '300').attr('id', 'worldmap')
-                .append('g')
+            let svg2 = d3.select('body').append('svg').attr('width', '1200').attr('height', '300').attr('id', 'worldmap')
+                svg2.append('g')
                     .attr('class', 'map')
                     .attr('transform', 'translate(100, 100)')
                         .selectAll('path').data(countries.features).enter().append('path')
@@ -198,6 +198,16 @@ async function init() {
                                 div.transition().duration('50').style('opacity', 0)
                                 }
                             )
+            svg2.append("circle").attr("cx",620).attr("cy",100).attr("r", 6).style("fill", "black")
+            svg2.append("circle").attr("cx",620).attr("cy",120).attr("r", 6).style("fill", "green")
+            svg2.append("circle").attr("cx",620).attr("cy",140).attr("r", 6).style("fill", "blue")
+            svg2.append("circle").attr("cx",620).attr("cy",160).attr("r", 6).style("fill", "orange")
+            svg2.append("circle").attr("cx",620).attr("cy",180).attr("r", 6).style("fill", "red")
+            svg2.append("text").attr("x", 640).attr("y", 100).text("Home Country").style("font-size", "15px").attr("alignment-baseline","middle")
+            svg2.append("text").attr("x", 640).attr("y", 120).text("Visa Free").style("font-size", "15px").attr("alignment-baseline","middle")
+            svg2.append("text").attr("x", 640).attr("y", 140).text("Visa On Arrival").style("font-size", "15px").attr("alignment-baseline","middle")
+            svg2.append("text").attr("x", 640).attr("y", 160).text("Electronic Visa").style("font-size", "15px").attr("alignment-baseline","middle")
+            svg2.append("text").attr("x", 640).attr("y", 180).text("Visa Required").style("font-size", "15px").attr("alignment-baseline","middle")
     });
 
     d3.select('body').append('p').attr('width', '800px').attr('word-wrap', 'break-word')
