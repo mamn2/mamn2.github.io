@@ -172,7 +172,7 @@ async function init() {
             const countries = topojson.feature(data, data.objects.countries);
             countries.features.splice(159, 1)
             console.log(data)
-            let svg2 = d3.select('body').append('svg').attr('width', '1200').attr('height', '300').attr('id', 'worldmap')
+            let svg2 = d3.select('body').append('svg').attr('width', '900').attr('height', '400').attr('id', 'worldmap')
                 svg2.append('g')
                     .attr('class', 'map')
                     .attr('transform', 'translate(100, 100)')
